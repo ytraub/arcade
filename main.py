@@ -66,7 +66,7 @@ class Splash(Container):
         yield GameList()
 
     def render(self) -> RenderResult:
-        return LinearGradient(45, STOPS)
+        return LinearGradient(90, STOPS)
 
 
 class GameListItem(ListItem):
