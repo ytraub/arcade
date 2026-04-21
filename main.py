@@ -11,35 +11,24 @@ from textual.widgets import Footer, Label, ListItem, ListView
 
 COLORS = [
     "#00005f",
-    "#000087",
     "#0000af",
-    "#0000d7",
-    "#0000ff",  # blue
-    "#005fff",
+    "#0000ff",
     "#0087ff",
-    "#00afff",
     "#00d7ff",
-    "#00ffff",  # cyan
-    "#00ffaf",
+    "#00ffff",
     "#00ff87",
-    "#00ff5f",
     "#00ff00",
-    "#5fff00",  # green
     "#87ff00",
-    "#afff00",
     "#d7ff00",
-    "#ffff00",  # yellow
-    "#ffd700",
+    "#ffff00",
     "#ffaf00",
-    "#ff8700",
     "#ff5f00",
-    "#ff0000",  # orange/red
-    "#ff00af",
+    "#ff0000",
     "#d700af",
-    "#af00af",
     "#8700af",
-    "#5f00af",  # purple
 ]
+
+STOPS = [(i / (len(COLORS) - 1), color) for i, color in enumerate(COLORS)]
 
 
 STOPS = [(i / (len(COLORS) - 1), color) for i, color in enumerate(COLORS)]
