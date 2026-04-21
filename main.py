@@ -10,19 +10,38 @@ from textual.widgets import Footer, Label, ListItem, ListView
 
 
 COLORS = [
-    "#881177",
-    "#aa3355",
-    "#cc6666",
-    "#ee9944",
-    "#eedd00",
-    "#99dd55",
-    "#44dd88",
-    "#22ccbb",
-    "#00bbcc",
-    "#0099cc",
-    "#3366bb",
-    "#663399",
+    "#00005f",
+    "#000087",
+    "#0000af",
+    "#0000d7",
+    "#0000ff",  # blue
+    "#005fff",
+    "#0087ff",
+    "#00afff",
+    "#00d7ff",
+    "#00ffff",  # cyan
+    "#00ffaf",
+    "#00ff87",
+    "#00ff5f",
+    "#00ff00",
+    "#5fff00",  # green
+    "#87ff00",
+    "#afff00",
+    "#d7ff00",
+    "#ffff00",  # yellow
+    "#ffd700",
+    "#ffaf00",
+    "#ff8700",
+    "#ff5f00",
+    "#ff0000",  # orange/red
+    "#ff00af",
+    "#d700af",
+    "#af00af",
+    "#8700af",
+    "#5f00af",  # purple
 ]
+
+
 STOPS = [(i / (len(COLORS) - 1), color) for i, color in enumerate(COLORS)]
 
 
@@ -47,7 +66,7 @@ class Splash(Container):
         yield GameList()
 
     def render(self) -> RenderResult:
-        return LinearGradient(62, STOPS)
+        return LinearGradient(45, STOPS)
 
 
 class GameListItem(ListItem):
@@ -79,13 +98,13 @@ class GameList(Widget):
 
     def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
         for item in self.list_view.children:
-            item.set_highlighted(False) # type: ignore
+            item.set_highlighted(False)  # type: ignore
             item.remove_class("highlighted-item")
 
         if event.item:
-            event.item.set_highlighted(True) # type: ignore
+            event.item.set_highlighted(True)  # type: ignore
             event.item.add_class("highlighted-item")
-            
+
     def on_list_view_selected(self, event: ListView.Highlighted) -> None:
         if event.item:
             subprocess.run(["pico8"])
