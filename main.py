@@ -115,7 +115,7 @@ class Main(App):
                 game_list = self.query_one(GameList)
 
                 if game_list.p is not None:
-                    os.killpg(os.getpgid(game_list.p.pid), signal.SIGTERM)
+                    game_list.p.terminate()
                     game_list.p = None
 
             case "q":
