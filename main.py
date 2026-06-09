@@ -3,14 +3,13 @@ import signal
 import subprocess
 import random
 
-from textual.message import Message
-from textual.renderables.gradient import LinearGradient
 from textual.app import App, ComposeResult, RenderResult
 from textual.containers import Container
-from textual.events import Event, Key
+from textual.events import Key
 from textual.widget import Widget
-from textual.widgets import Footer, Label, ListItem, ListView
+from textual.widgets import Label, ListItem, ListView
 
+P = None
 
 COLORS = [
     "#00005f",
@@ -30,7 +29,6 @@ COLORS = [
     "#d700af",
     "#8700af",
 ]
-
 
 
 class Title(Widget):
@@ -71,11 +69,6 @@ class GameListItem(ListItem):
 
 
 class GameList(Widget):
-    def __init__(self, *children: Widget, name: str | None = None, id: str | None = None, classes: str | None = None, disabled: bool = False, markup: bool = True) -> None:
-        super().__init__(*children, name=name, id=id, classes=classes, disabled=disabled, markup=markup)
-        
-        self.p = None
-    
     def compose(self) -> ComposeResult:
         self.list_view = ListView(
             GameListItem("Hello"),
@@ -95,9 +88,20 @@ class GameList(Widget):
             event.item.set_highlighted(True)  # type: ignore
             event.item.add_class("highlighted-item")
 
-    def on_list_view_selected(self, event: ListView.Highlighted) -> None:
+    def on_list_view_selected(self, event: ListView.Selected) -> None:
+        global P
+
         if event.item:
-            self.p = subprocess.Popen("pico8_dyn", stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
+            # Kill previous process if one is running
+            if P is not None and P.poll() is None:
+                os.killpg(os.getpgid(P.pid), signal.SIGTERM)
+
+            P = subprocess.Popen(
+                "pico8_dyn",
+                stdout=subprocess.PIPE,
+                shell=True,
+                preexec_fn=os.setsid,
+            )
 
 
 class Main(App):
@@ -110,18 +114,20 @@ class Main(App):
         yield Splash()
 
     def on_key(self, event: Key) -> None:
+        global P
+
         match event.key:
             case "x":
-                game_list = self.query_one(GameList)
-
-                if game_list.p is not None:
-                    game_list.p.terminate()
-                    game_list.p = None
+                if P is not None and P.poll() is None:
+                    os.killpg(os.getpgid(P.pid), signal.SIGTERM)
+                    P = None
 
             case "q":
+                if P is not None and P.poll() is None:
+                    os.killpg(os.getpgid(P.pid), signal.SIGTERM)
+
                 self.exit()
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.run()
+    Main().run()
