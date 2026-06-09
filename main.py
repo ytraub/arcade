@@ -90,7 +90,7 @@ class GameList(Widget):
 
     def on_list_view_selected(self, event: ListView.Highlighted) -> None:
         if event.item:
-            subprocess.run(["pico8"])
+            subprocess.run(["pico8_dyn"])
 
 
 class Main(App):
