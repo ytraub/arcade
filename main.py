@@ -1,4 +1,5 @@
 import subprocess
+import random
 
 from textual.message import Message
 from textual.renderables.gradient import LinearGradient
@@ -28,10 +29,6 @@ COLORS = [
     "#8700af",
 ]
 
-STOPS = [(i / (len(COLORS) - 1), color) for i, color in enumerate(COLORS)]
-
-
-STOPS = [(i / (len(COLORS) - 1), color) for i, color in enumerate(COLORS)]
 
 
 class Title(Widget):
@@ -48,14 +45,11 @@ class Title(Widget):
 
 class Splash(Container):
     def on_mount(self) -> None:
-        pass
+        self.styles.background = random.choice(COLORS)
 
     def compose(self) -> ComposeResult:
         yield Title()
         yield GameList()
-
-    def render(self) -> RenderResult:
-        return LinearGradient(90, STOPS)
 
 
 class GameListItem(ListItem):
