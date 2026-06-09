@@ -1,3 +1,5 @@
+import os
+import signal
 import subprocess
 import random
 
@@ -69,6 +71,11 @@ class GameListItem(ListItem):
 
 
 class GameList(Widget):
+    def __init__(self, *children: Widget, name: str | None = None, id: str | None = None, classes: str | None = None, disabled: bool = False, markup: bool = True) -> None:
+        super().__init__(*children, name=name, id=id, classes=classes, disabled=disabled, markup=markup)
+        
+        self.p = None
+    
     def compose(self) -> ComposeResult:
         self.list_view = ListView(
             GameListItem("Hello"),
@@ -90,7 +97,7 @@ class GameList(Widget):
 
     def on_list_view_selected(self, event: ListView.Highlighted) -> None:
         if event.item:
-            subprocess.run(["pico8_dyn"])
+            self.p = subprocess.Popen("pico8_dyn", stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
 
 
 class Main(App):
@@ -104,6 +111,13 @@ class Main(App):
 
     def on_key(self, event: Key) -> None:
         match event.key:
+            case "x":
+                game_list = self.query_one(GameList)
+
+                if game_list.p is not None:
+                    os.killpg(os.getpgid(game_list.p.pid), signal.SIGTERM)
+                    game_list.p = None
+
             case "q":
                 self.exit()
 
