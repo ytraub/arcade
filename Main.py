@@ -269,4 +269,6 @@ class Main(App):
 
 
 if __name__ == "__main__":
+    open(RECEIVE_FILE, "x").close()
+    open(SENDER_FILE, "x").close()
     Main().run()
