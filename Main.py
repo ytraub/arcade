@@ -43,11 +43,10 @@ COLORS = [
     "#8700af",
 ]
 
-
 GAME_DIR = "games"
 GAMES = [
-    ("Slot Machine", "slot_machine/main.p8"),
-    ("Tetris", "tetris/main.p8")
+    ("Slot Machine", "slot_machine/main.p8", False),
+    ("Tetris", "tetris/main.p8", False)
 ]
 
 class Title(Widget):
@@ -69,12 +68,13 @@ GAMES = [
 ]
 
 class GameListItem(ListItem):
-    def __init__(self, label: str, path: str) -> None:
+    def __init__(self, label: str, path: str, multiplayer: bool) -> None:
         super().__init__()
         self.label_text = label
         self.label_widget = Label(label)
         
         self.path = path
+        self.multiplayer = multiplayer
 
     def compose(self) -> ComposeResult:
         yield self.label_widget
@@ -89,7 +89,7 @@ class GameListItem(ListItem):
 class GameList(Widget):
     def compose(self) -> ComposeResult:
         self.list_view = ListView(
-            *(GameListItem(name, path) for name, path in GAMES)
+            *(GameListItem(name, path, multiplayer) for name, path, multiplayer in GAMES)
         )
         yield self.list_view
 
@@ -111,7 +111,10 @@ class GameList(Widget):
         if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
             UPDATOR_THREAD.join(timeout=1)
 
-        comm.send_userdata(player1)
+        if event.item.multiplayer :
+            comm.send_userdata(player1, player2)
+        else :
+            comm.send_userdata(player1)
 
         P = subprocess.Popen(
             f"pico8_dyn -i {comm.SENDER_FILE} -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
