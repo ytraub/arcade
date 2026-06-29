@@ -291,5 +291,4 @@ class Main(App):
 
 
 if __name__ == "__main__":
-    open(comm.SENDER_FILE, "x").close()
     Main().run()
