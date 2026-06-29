@@ -236,9 +236,9 @@ class Main(App):
 
                 case "z":
                     if splash.login_stage == 1:
-                        guest = find_user(69)
+                        guest = db.find_user(69)
                     else :
-                        guest = find_user(67)
+                        guest = db.find_user(67)
 
                     splash.complete_login(guest)
 
