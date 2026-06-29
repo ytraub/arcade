@@ -1,7 +1,7 @@
 from UserData import UserData
 from Database import *
 
-RECEIVE_FILE = "receive.txt"
+RECEIVE_FILE = "/home/judithfister/.lexaloffle/pico-8/carts/receive.txt"
 SENDER_FILE = "send.txt"
 
 def send_userdata(ud: UserData) :
