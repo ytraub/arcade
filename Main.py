@@ -2,6 +2,7 @@ import os
 import signal
 import subprocess
 import random
+import threading
 
 from textual.app import App, ComposeResult, RenderResult
 from textual.containers import Container
@@ -13,10 +14,12 @@ from textual import work
 import Names as names
 import Database as db
 import NFCReader as nfc
+import Communication as comm
 
 from UserData import UserData
 
 P = None
+UPDATOR_THREAD = None
 
 COLORS = [
     "#00005f",
@@ -96,6 +99,7 @@ class GameList(Widget):
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         global P
+        global UPDATOR_THREAD
 
         if not event.item:
             return
@@ -103,12 +107,22 @@ class GameList(Widget):
         if P and P.poll() is None:
             os.killpg(os.getpgid(P.pid), signal.SIGTERM)
 
+        if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
+            UPDATOR_THREAD.join(timeout=1)
+
         P = subprocess.Popen(
             f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
             stdout=subprocess.PIPE,
             shell=True,
             preexec_fn=os.setsid,
         )
+
+        UPDATOR_THREAD = threading.Thread(
+            target=comm.userdata_updator,
+            daemon=True,
+        )
+
+        UPDATOR_THREAD.start()
 
 
 class Splash(Container):
@@ -263,6 +277,9 @@ class Main(App):
                 if P is not None and P.poll() is None:
                     os.killpg(os.getpgid(P.pid), signal.SIGTERM)
                     P = None
+
+                if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
+                    UPDATOR_THREAD.join(timeout=1)
 
 
 if __name__ == "__main__":

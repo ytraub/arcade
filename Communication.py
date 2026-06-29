@@ -1,4 +1,5 @@
 from UserData import UserData
+from Database import *
 
 RECEIVE_FILE = "receive.txt"
 SENDER_FILE = "send.txt"
@@ -17,3 +18,16 @@ def receive_userdata(ud: UserData) :
             ud.coins = int(coins)
         except ValueError:
             print("Invalid data format")
+
+
+def userdata_updator():
+    user = UserData(-1, "", 0, "")
+
+    while True:
+        receive_userdata(user)
+
+        if user.name:
+            update_coins(user.name, user.coins)
+
+            user.name = ""
+            user.coins = 0

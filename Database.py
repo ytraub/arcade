@@ -20,6 +20,19 @@ def add_user(name, nfc):
     cur.close()
     conn.close()
 
+def update_coins(name, coins):
+    conn = sql.connect(DB_NAME)
+    cur = conn.cursor()
+
+    cur.execute(
+        "UPDATE users SET tokens = ? WHERE username = ?",
+        (coins, name)
+    )
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
 
 def find_user(nfc):
     conn = sql.connect(DB_NAME)
