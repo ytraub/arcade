@@ -37,6 +37,10 @@ COLORS = [
     "#8700af",
 ]
 
+GAMES = [
+    
+]
+
 
 class Title(Widget):
     def render(self) -> RenderResult:
