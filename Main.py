@@ -50,7 +50,6 @@ GAMES = [
     ("Tetris", "tetris/main.p8")
 ]
 
-
 class Title(Widget):
     def render(self) -> RenderResult:
         return r"""
@@ -68,7 +67,6 @@ GAMES = [
     ("Slot Machine", "slot_machine/main.p8"),
     ("Tetris", "tetris/main.p8"),
 ]
-
 
 class GameListItem(ListItem):
     def __init__(self, label: str, path: str) -> None:

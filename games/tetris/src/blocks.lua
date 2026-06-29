@@ -261,4 +261,9 @@ function clear_full_rows()
     end
 
     player.score += (i * 100) + (i * (i - 1)) * 100
+
+    coins += 10
+    local output = name .. ":" .. coins
+    printh(output, "receive.txt", true)
+
 end

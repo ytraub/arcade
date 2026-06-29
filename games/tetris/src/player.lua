@@ -100,4 +100,5 @@ end
 
 function draw_points()
     print(pad_number(player.score, 6), 8, 6, 8)
+    print("coins: " .. coins, 8, 18, 8)
 end
