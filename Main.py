@@ -9,14 +9,14 @@ import NFCReader as nfc
 def main() -> None:
     db.init()
 
-uid = nfc.read()
-user = db.find_user(uid)
-
-if user is None:
-    db.add_user(names.generate(), uid)
+    uid = nfc.read()
     user = db.find_user(uid)
 
-print("Name: " + user.name + "\nUID: " + user.uid + "\nCoins: " + str(user.coins)) # type: ignore
+    if user is None:
+        db.add_user(names.generate(), uid)
+        user = db.find_user(uid)
+
+    print("Name: " + user.name + "\nUID: " + user.uid + "\nCoins: " + str(user.coins)) # type: ignore
 
 # Show Games View
 
