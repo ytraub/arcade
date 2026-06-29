@@ -1,4 +1,16 @@
 function _init()
+    serial(0x806, 0x9a00, 8)
+    local text = ""
+    for i=0, 7 do
+        text = text .. chr(peek(0x9a00 + i))
+    end
+
+    local pos = data:find(":")
+
+    if pos then
+        name = sub(data, 1, pos - 1)
+        coins = sub(data, pos + 1)
+    end
 end
 
 function _update()

@@ -21,6 +21,9 @@ from UserData import UserData
 P = None
 UPDATOR_THREAD = None
 
+player1 = None
+player2 = None
+
 COLORS = [
     "#00005f",
     "#0000af",
@@ -110,8 +113,10 @@ class GameList(Widget):
         if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
             UPDATOR_THREAD.join(timeout=1)
 
+        send_userdata(player1)
+
         P = subprocess.Popen(
-            f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
+            f"pico8_dyn -i {SENDER_FILE} -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
             stdout=subprocess.PIPE,
             shell=True,
             preexec_fn=os.setsid,
@@ -130,9 +135,6 @@ class Splash(Container):
         super().__init__()
 
         self.login_complete = False
-
-        self.player1 = None
-        self.player2 = None
 
         self.login_stage = 1
 
@@ -161,6 +163,9 @@ class Splash(Container):
 
     @work(thread=True)
     def wait_for_nfc(self):
+        global player1
+        global player2
+
         while not self.login_complete:
 
             uid = nfc.read()
@@ -182,8 +187,8 @@ class Splash(Container):
 
             # Prevent same card for both players
             if (
-                self.player1 is not None
-                and self.player1.uid == user.uid
+                player1 is not None
+                and player1.uid == user.uid
             ):
                 continue
 
@@ -193,6 +198,9 @@ class Splash(Container):
             )
 
     def complete_login(self, user: UserData):
+        global player1
+        global player2
+        
         if self.login_complete:
             return
 
@@ -200,7 +208,7 @@ class Splash(Container):
         # PLAYER 1
         #
         if self.login_stage == 1:
-            self.player1 = user
+            player1 = user
             self.login_stage = 2
 
             self.login_label.update(
@@ -216,19 +224,19 @@ class Splash(Container):
         # PLAYER 2
         #
         if (
-            self.player1 is not None
-            and self.player1.uid == user.uid
+            player1 is not None
+            and player1.uid == user.uid
         ):
             return
 
-        self.player2 = user
+        player2 = user
         self.login_complete = True
 
         self.login_label.display = False
 
         self.player_info.update(
-            f"P1: {self.player1.name} ({self.player1.coins} coins)\n"  # type: ignore
-            f"P2: {self.player2.name} ({self.player2.coins} coins)"
+            f"P1: {player1.name} ({player1.coins} coins)\n"  # type: ignore
+            f"P2: {player2.name} ({player2.coins} coins)"
         )
 
         self.player_info.display = True
@@ -283,4 +291,5 @@ class Main(App):
 
 
 if __name__ == "__main__":
+    open(SENDER_FILE, "x").close()
     Main().run()
