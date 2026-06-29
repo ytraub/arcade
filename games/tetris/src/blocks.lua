@@ -255,15 +255,14 @@ function clear_full_rows()
             shift_rows_down(y)
 
             i += 1
+
+            coins += 10
+            local output = name .. ":" .. coins
+            printh(output, "receive.txt", true)
         else
             y -= 1
         end
     end
 
     player.score += (i * 100) + (i * (i - 1)) * 100
-
-    coins += 10
-    local output = name .. ":" .. coins
-    printh(output, "receive.txt", true)
-
 end
