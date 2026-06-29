@@ -1,16 +1,18 @@
 import sqlite3 as sql
 from UserData import UserData
 from datetime import date
+import os
 
-DB_NAME = "test.db"
+DB_NAME = "db/sqlite.db"
+DEFAULT_USERS = (("Pommi", 67), ("Pidor", 69))
 
-def add_user(name, nfc) :
+
+def add_user(name, nfc):
     conn = sql.connect(DB_NAME)
     cur = conn.cursor()
 
     cur.execute(
-        'INSERT INTO users (username, nfc, tokens) VALUES (?, ?, ?)',
-        (name, nfc, 100)
+        "INSERT INTO users (username, nfc, tokens) VALUES (?, ?, ?)", (name, nfc, 100)
     )
 
     conn.commit()
@@ -18,14 +20,12 @@ def add_user(name, nfc) :
     cur.close()
     conn.close()
 
-def find_user(nfc) :
+
+def find_user(nfc):
     conn = sql.connect(DB_NAME)
     cur = conn.cursor()
 
-    res = cur.execute(
-        'SELECT * FROM users WHERE nfc = ?',
-        (nfc,)
-    )
+    res = cur.execute("SELECT * FROM users WHERE nfc = ?", (nfc,))
 
     out = res.fetchall()
 
@@ -37,7 +37,8 @@ def find_user(nfc) :
 
     return UserData(out[0][0], out[0][1], out[0][3], out[0][2])
 
-def is_name_taken(name) :
+
+def is_name_taken(name):
     conn = sql.connect(DB_NAME)
     cur = conn.cursor()
 
@@ -50,7 +51,8 @@ def is_name_taken(name) :
 
     return exists
 
-def reset_db() :
+
+def reset():
     conn = sql.connect(DB_NAME)
     cur = conn.cursor()
 
@@ -62,3 +64,26 @@ def reset_db() :
 
     conn.close()
 
+
+def add_default_user_if_not_exists():
+    for name, nfc in DEFAULT_USERS:
+        if is_name_taken(name):
+            continue
+
+        add_user(name, nfc)
+
+
+def init():
+    os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
+
+    with sql.connect(DB_NAME) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                nfc TEXT NOT NULL UNIQUE,
+                tokens INTEGER NOT NULL
+            )
+        """)
+
+    add_default_user_if_not_exists()

@@ -2,7 +2,7 @@ import subprocess
 import time
 import re
 
-def read_nfc() :
+def read() :
     while True :
         result = subprocess.run(
             ["nfc-poll"],

@@ -7,9 +7,7 @@ def load_words():
 
 WORD_LIST = load_words()
 
-def generate_name():
+def generate():
     name = random.choice(WORD_LIST) + random.choice(WORD_LIST)
     if not is_name_taken(name) :
         return name
-
-    generate_name()
