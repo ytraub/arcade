@@ -10,9 +10,10 @@ from textual.widget import Widget
 from textual.widgets import Label, ListItem, ListView
 from textual import work
 
-from NFCReader import *
-from NameGen import *
-from Database import *
+import Names as names
+import Database as db
+import NFCReader as nfc
+
 from UserData import UserData
 
 P = None
@@ -138,7 +139,7 @@ class Splash(Container):
     def wait_for_nfc(self):
         while not self.login_complete:
 
-            uid = read_nfc()
+            uid = nfc.read()
 
             if self.login_complete:
                 return
@@ -146,11 +147,11 @@ class Splash(Container):
             if uid is None:
                 continue
 
-            user = find_user(uid)
+            user = db.find_user(uid)
 
             if user is None:
-                add_user(generate_name(), uid)
-                user = find_user(uid)
+                db.add_user(names.generate(), uid)
+                user = db.find_user(uid)
 
             if user is None:
                 continue
@@ -202,7 +203,7 @@ class Splash(Container):
         self.login_label.display = False
 
         self.player_info.update(
-            f"P1: {self.player1.name} ({self.player1.coins} coins)\n"
+            f"P1: {self.player1.name} ({self.player1.coins} coins)\n"  # type: ignore
             f"P2: {self.player2.name} ({self.player2.coins} coins)"
         )
 

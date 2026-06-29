@@ -1,0 +1,30 @@
+Screen {
+    align: center middle;
+}
+
+Splash {
+    align: center middle;
+}
+
+Title {
+    height: 20%;
+    margin: 0 4 2 4;
+    color: $text;
+    background: $surface;
+    content-align: center middle;
+    text-style: bold;
+}
+
+GameList {
+    margin: 0 4;
+    height: 70%;
+}
+
+ListItem {
+    padding: 2 4;
+    color: $text;
+}
+
+.highlighted-item {
+    padding: 2 6;
+}

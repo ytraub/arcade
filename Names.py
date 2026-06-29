@@ -1,6 +1,9 @@
 import random
 from Database import *
 
+ADJECTIVES = "names/adjectives.txt"
+NOUNS = "names/nouns.txt"
+
 def load_words():
     with open("words.txt", "r", encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip()]
