@@ -113,7 +113,7 @@ class GameList(Widget):
         if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
             UPDATOR_THREAD.join(timeout=1)
 
-        send_userdata(player1)
+        comm.send_userdata(player1)
 
         P = subprocess.Popen(
             f"pico8_dyn -i {comm.SENDER_FILE} -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
