@@ -37,8 +37,10 @@ COLORS = [
     "#8700af",
 ]
 
+
+GAME_DIR = "games"
 GAMES = [
-    
+    ("Slot Machine", "slot_machine/cartridge.p8")
 ]
 
 
@@ -54,18 +56,26 @@ class Title(Widget):
 """
 
 
+GAME_DIR = "games"
+GAMES = [
+    ("Slot Machine", "slot_machine/cartridge.p8"),
+]
+
+
 class GameListItem(ListItem):
-    def __init__(self, label: str) -> None:
+    def __init__(self, label: str, path: str) -> None:
         super().__init__()
         self.label_text = label
         self.label_widget = Label(label)
+        
+        self.path = path
 
     def compose(self) -> ComposeResult:
         yield self.label_widget
 
     def set_highlighted(self, state: bool) -> None:
         if state:
-            self.label_widget.update("➤  " + self.label_text)
+            self.label_widget.update("> " + self.label_text)
         else:
             self.label_widget.update(self.label_text)
 
@@ -73,36 +83,30 @@ class GameListItem(ListItem):
 class GameList(Widget):
     def compose(self) -> ComposeResult:
         self.list_view = ListView(
-            GameListItem("Hello"),
-            GameListItem("Hello"),
-            GameListItem("Hello"),
-            GameListItem("Hello"),
-            GameListItem("Hello"),
+            *(GameListItem(name, path) for name, path in GAMES)
         )
         yield self.list_view
 
     def on_list_view_highlighted(self, event: ListView.Highlighted) -> None:
         for item in self.list_view.children:
-            item.set_highlighted(False)  # type: ignore
-            item.remove_class("highlighted-item")
-
-        if event.item:
-            event.item.set_highlighted(True)  # type: ignore
-            event.item.add_class("highlighted-item")
+            item.set_highlighted(item is event.item)  # type: ignore
+            item.set_class(item is event.item, "highlighted-item")
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         global P
 
-        if event.item:
-            if P is not None and P.poll() is None:
-                os.killpg(os.getpgid(P.pid), signal.SIGTERM)
+        if not event.item:
+            return
 
-            P = subprocess.Popen(
-                "pico8_dyn",
-                stdout=subprocess.PIPE,
-                shell=True,
-                preexec_fn=os.setsid,
-            )
+        if P and P.poll() is None:
+            os.killpg(os.getpgid(P.pid), signal.SIGTERM)
+
+        P = subprocess.Popen(
+            f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}",
+            stdout=subprocess.PIPE,
+            shell=True,
+            preexec_fn=os.setsid,
+        )
 
 
 class Splash(Container):
@@ -269,6 +273,6 @@ class Main(App):
 
 
 if __name__ == "__main__":
-    open(RECEIVE_FILE, "x").close()
-    open(SENDER_FILE, "x").close()
+    """ open(RECEIVE_FILE, "x").close()
+    open(SENDER_FILE, "x").close() """
     Main().run()
