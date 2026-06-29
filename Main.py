@@ -110,6 +110,9 @@ class GameList(Widget):
         if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
             UPDATOR_THREAD.join(timeout=1)
 
+        folder, file = event.item.path.split('/')
+        RECEIVE_FILE = folder + "/receive.txt"
+
         P = subprocess.Popen(
             f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
             stdout=subprocess.PIPE,
@@ -283,6 +286,4 @@ class Main(App):
 
 
 if __name__ == "__main__":
-    open(RECEIVE_FILE, "x").close()
-    open(SENDER_FILE, "x").close()
     Main().run()
