@@ -235,12 +235,10 @@ class Main(App):
             match event.key:
 
                 case "z":
-                    guest = UserData(
-                        -1,
-                        f"Guest {splash.login_stage}",
-                        100,
-                        f"GUEST{splash.login_stage}",
-                    )
+                    if splash.login_stage == 1:
+                        guest = find_user(69)
+                    else :
+                        guest = find_user(67)
 
                     splash.complete_login(guest)
 
