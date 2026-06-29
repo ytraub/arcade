@@ -58,10 +58,9 @@ function update_game()
         local win = check_win()
 
         coins += win
+        local output = "pidor:" .. coins
+        printh(output, "receive.txt", true)
 
         game_state = "idle"
     end
-
-    local output = "pidor:" .. coins
-    printh(output, "receive.txt", true)
 end
