@@ -40,7 +40,8 @@ COLORS = [
 
 GAME_DIR = "games"
 GAMES = [
-    ("Slot Machine", "slot_machine/cartridge.p8")
+    ("Slot Machine", "slot_machine/main.p8"),
+    ("Tetris", "tetris/main.p8")
 ]
 
 
@@ -58,7 +59,8 @@ class Title(Widget):
 
 GAME_DIR = "games"
 GAMES = [
-    ("Slot Machine", "slot_machine/cartridge.p8"),
+    ("Slot Machine", "slot_machine/main.p8"),
+    ("Tetris", "tetris/main.p8"),
 ]
 
 
@@ -102,7 +104,7 @@ class GameList(Widget):
             os.killpg(os.getpgid(P.pid), signal.SIGTERM)
 
         P = subprocess.Popen(
-            f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}",
+            f"pico8_dyn -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
             stdout=subprocess.PIPE,
             shell=True,
             preexec_fn=os.setsid,
@@ -248,10 +250,7 @@ class Main(App):
                     else :
                         guest = db.find_user(67)
 
-                    splash.complete_login(guest)
-
-                case "q":
-                    self.exit()
+                    splash.complete_login(guest) # type: ignore
 
             return
 
@@ -260,19 +259,13 @@ class Main(App):
         #
         match event.key:
 
-            case "x":
+            case "q":
                 if P is not None and P.poll() is None:
                     os.killpg(os.getpgid(P.pid), signal.SIGTERM)
                     P = None
 
-            case "q":
-                if P is not None and P.poll() is None:
-                    os.killpg(os.getpgid(P.pid), signal.SIGTERM)
-
-                self.exit()
-
 
 if __name__ == "__main__":
-    """ open(RECEIVE_FILE, "x").close()
-    open(SENDER_FILE, "x").close() """
+    open(RECEIVE_FILE, "x").close()
+    open(SENDER_FILE, "x").close()
     Main().run()
