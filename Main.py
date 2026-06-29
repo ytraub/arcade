@@ -116,7 +116,7 @@ class GameList(Widget):
         send_userdata(player1)
 
         P = subprocess.Popen(
-            f"pico8_dyn -i {SENDER_FILE} -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
+            f"pico8_dyn -i {comm.SENDER_FILE} -run {os.path.join(GAME_DIR, event.item.path)}", # type: ignore
             stdout=subprocess.PIPE,
             shell=True,
             preexec_fn=os.setsid,
@@ -291,5 +291,5 @@ class Main(App):
 
 
 if __name__ == "__main__":
-    open(SENDER_FILE, "x").close()
+    open(comm.SENDER_FILE, "x").close()
     Main().run()
