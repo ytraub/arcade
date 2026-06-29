@@ -11,7 +11,7 @@ from textual.widgets import Label, ListItem, ListView
 from textual import work
 
 from NFCReader import *
-from NameGen import *
+from Names import *
 from Database import *
 from UserData import UserData
 
@@ -149,7 +149,7 @@ class Splash(Container):
             user = find_user(uid)
 
             if user is None:
-                add_user(generate_name(), uid)
+                add_user(generate(), uid)
                 user = find_user(uid)
 
             if user is None:
