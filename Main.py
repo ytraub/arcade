@@ -46,7 +46,8 @@ COLORS = [
 GAME_DIR = "games"
 GAMES = [
     ("Slot Machine", "slot_machine/main.p8", False),
-    ("Tetris", "tetris/main.p8", False)
+    ("Tetris", "tetris/main.p8", False),
+    ("Flappy Bird", "flappy_bird/main.p8", True)
 ]
 
 class Title(Widget):
