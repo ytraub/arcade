@@ -314,7 +314,7 @@ async def scheduler():
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
-    db.init()
-    db.reset()
-    asyncio.run(scheduler())
+    #db.init()
+    #db.reset()
+    #asyncio.run(scheduler())
     Main().run()
