@@ -303,7 +303,7 @@ class Main(App):
                 player1 = db.find_user(player1.uid)
                 player2 = db.find_user(player2.uid)
 
-                if P is None and P.poll() is not None:
+                if P is None:
                     self.logout()
 
 
