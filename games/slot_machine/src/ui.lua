@@ -18,3 +18,8 @@ function draw_ui()
 
     print("⬅️➡️ change bet",8,118,6)
 end
+
+function draw_broke_ui()
+    rectfill(0,0,150,150,0)
+    print("You are broke", 40, 40, 8)
+end

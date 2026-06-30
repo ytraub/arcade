@@ -3,7 +3,7 @@ symbols = {
     "★",
     "$",
     "♥",
-    "x"
+    "x",
 }
 
 symbol_colors = {

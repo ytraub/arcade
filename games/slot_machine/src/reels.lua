@@ -9,6 +9,7 @@ function new_reel()
 end
 
 function spin_reel(reel)
+    sfx(0, -1, 0, 20)
     reel.spinning = true
     reel.timer = 30 + flr(rnd(30))
 end
