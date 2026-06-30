@@ -51,6 +51,7 @@ function _update()
 
   if check_collision() then
    gamestate="gameover"
+   sfx(2)
     
     if flyer==0 then
         local output = user1 .. ":" .. (coins1 + score)

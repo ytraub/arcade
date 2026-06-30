@@ -33,6 +33,7 @@ function update_pillars()
   if not p.passed and p.x+pillar_w<bird.x then
    p.passed=true
    score+=1
+   sfx(1)
   end
   
     if p.x < -pillar_w then

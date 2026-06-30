@@ -85,7 +85,6 @@ def add_default_user_if_not_exists():
 
         add_user(name, nfc)
 
-
 def init():
     os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
 

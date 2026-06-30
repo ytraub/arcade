@@ -13,6 +13,7 @@ function bird_update()
 
 if btnp(4,flyer) or btnp(5,flyer) then
    bird.vel=jump_vel
+   sfx(0)
   end
 
  bird.y+=bird.vel

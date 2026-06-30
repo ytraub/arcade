@@ -31,10 +31,11 @@ function update_p2()
   if btnp(2,1-flyer) then
    target.gap_y-=3
    p2_timer=shift_cooldown
-
+   sfx(3)
   elseif btnp(3,1-flyer) then
    target.gap_y+=3
    p2_timer=shift_cooldown
+   sfx(3)
   end
 
   target.gap_y=mid(
