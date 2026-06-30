@@ -231,7 +231,7 @@ class Splash(Container):
         self.login_label.display = False
 
         self.player_info.update(
-            f"P1: {player1.name} ({player1.coins} coins)\n"  # type: ignore
+            f"P1: {player1.name} ({player1.coins} coins)\n"
             f"P2: {player2.name} ({player2.coins} coins)"
         )
 
@@ -249,6 +249,18 @@ class Main(App):
 
     def compose(self) -> ComposeResult:
         yield Splash()
+
+    def logout(self):
+        global player1
+        global player2
+
+        player1 = None
+        player2 = None
+
+        splash = self.query_one(Splash)
+        splash.remove()
+
+        self.mount(Splash())
 
     def on_key(self, event: Key) -> None:
         global P
@@ -287,6 +299,10 @@ class Main(App):
 
                 player1 = db.find_user(player1.uid)
                 player2 = db.find_user(player2.uid)
+
+                if P is None and P.poll() is not None:
+                    self.logout()
+
 
 
 schedule.every().day.at("00:00").do(db.reset)
