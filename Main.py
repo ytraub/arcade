@@ -15,6 +15,7 @@ import Names as names
 import Database as db
 import NFCReader as nfc
 import Communication as comm
+import schedule
 
 from UserData import UserData
 
@@ -284,6 +285,19 @@ class Main(App):
                 if UPDATOR_THREAD and UPDATOR_THREAD.is_alive():
                     UPDATOR_THREAD.join(timeout=1)
 
+                player1 = db.find_user(player1.uid)
+                player2 = db.find_user(player2.uid)
+
+
+schedule.every().day.at("00:00").do(db.reset)
+
+async def scheduler():
+    while True:
+        schedule.run_pending()
+        await asyncio.sleep(60)
 
 if __name__ == "__main__":
+    db.init()
+    db.reset()
+    asyncio.run(scheduler())
     Main().run()
