@@ -16,6 +16,7 @@ import Database as db
 import NFCReader as nfc
 import Communication as comm
 import schedule
+import asyncio
 
 from UserData import UserData
 
@@ -211,7 +212,7 @@ class Splash(Container):
                 f"PLAYER 1: {user.name}\n\n"
                 f"PLAYER 2\n\n"
                 f"Tap NFC Card\n\n"
-                f"[Z] Skip"
+                f"[Y] Skip"
             )
 
             return
