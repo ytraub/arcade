@@ -265,6 +265,8 @@ class Main(App):
 
     def on_key(self, event: Key) -> None:
         global P
+        global player1
+        global player2
 
         splash = self.query_one(Splash)
 
